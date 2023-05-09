@@ -1,0 +1,14 @@
+[
+{
+    "model": "levelupapi.event",
+    "pk": 1,
+    "fields": {
+        "description": "Join us for an easy fun game of Candy Land!",
+        "date": "2023-05-20",
+        "time": "13:00",
+        "attendee": [1],
+        "organizer": 1,
+        "game": 1
+    }
+}
+]
