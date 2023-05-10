@@ -39,9 +39,10 @@ class EventView(ViewSet):
             game_id = request.query_params["game"]
             events = events.filter(game_id=game_id)
 
-            for event in events:
-                gamer = Gamer.objects.get(user=request.auth.user)
-                event.joined = gamer in event.attendees.all()
+            
+        for event in events:
+            gamer = Gamer.objects.get(user=request.auth.user)
+            event.joined = gamer in event.attendee.all()
         serializer = EventSerializer(events, many=True)
         return Response(serializer.data)
     
