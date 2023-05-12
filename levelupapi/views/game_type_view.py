@@ -18,9 +18,13 @@ class GameTypeView(ViewSet):
     
     def retrieve(self, request, pk=None):
         """Handles GET for single gameType"""
-        game_type = GameType.objects.get(pk=pk)
-        serialized = GameTypeSerializer(game_type)
-        return Response(serialized.data, status=status.HTTP_200_OK)
+
+        try:
+            game_type = GameType.objects.get(pk=pk)
+            serializer = GameTypeSerializer(game_type)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except GameType.DoesNotExist as ex:
+            return Response({'message': ex.args[0]}, status=status.HTTP_404_NOT_FOUND)
 
 
 class GameTypeSerializer(serializers.ModelSerializer):

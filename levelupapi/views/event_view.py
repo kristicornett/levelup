@@ -48,9 +48,14 @@ class EventView(ViewSet):
     
     def retrieve(self, request, pk=None):
         """Handles GET of single event"""
-        event = Event.objects.get(pk=pk)
-        serialized = EventSerializer(event)
-        return Response(serialized.data, status=status.HTTP_200_OK)
+
+        try:
+            event = Event.objects.get(pk=pk)
+            serializer = EventSerializer(event)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Event.DoesNotExist as ex:
+            return Response({'message': ex.args[0]}, status=status.HTTP_404_NOT_FOUND)
+        
     
     def update(self, request, pk=None):
         """Handles PUT for single event"""

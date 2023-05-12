@@ -23,9 +23,13 @@ class GamerView(ViewSet):
         Returns:
             Response -- JSON serialized gamer record
         """
-        gamer = Gamer.objects.get(pk=pk)
-        serialized = GamerSerializer(gamer)
-        return Response(serialized.data, status=status.HTTP_200_OK)
+        try:
+            gamer = Gamer.objects.get(pk=pk)
+            serializer = GamerSerializer(gamer)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Gamer.DoesNotExist as ex:
+            return Response({'message': ex.args[0]}, status=status.HTTP_404_NOT_FOUND)
+       
 
 
 class GamerSerializer(serializers.ModelSerializer):
