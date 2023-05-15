@@ -5,7 +5,7 @@ class Event(models.Model):
     description = models.CharField(max_length=155)
     date = models.DateField()
     time = models.TimeField()
-    attendee = models.ManyToManyField("Gamer", related_name='events')
+    attendee = models.ManyToManyField("Gamer", related_name='events_attended')
     organizer = models.ForeignKey("Gamer", on_delete=models.CASCADE, related_name='games')
     game = models.ForeignKey("Game", on_delete=models.CASCADE, related_name='events')
 

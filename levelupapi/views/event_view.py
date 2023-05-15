@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework import serializers, status
 from levelupapi.models import Event, Gamer, Game, GameType
 from rest_framework.decorators import action
+from django.db.models import Count
 
 class EventView(ViewSet):
     """Level UP API event view"""
@@ -12,6 +13,7 @@ class EventView(ViewSet):
         
         Returns:
             Response: JSON serialized representation of newly created event"""
+        events = Event.objects.annotate(attendees_count=Count('attendees'))
         
         gamer = Gamer.objects.get(user=request.auth.user)
         game = Game.objects.get(pk=request.data["gameId"])
@@ -50,7 +52,7 @@ class EventView(ViewSet):
         """Handles GET of single event"""
 
         try:
-            event = Event.objects.get(pk=pk)
+            event = Event.objects.annotate(attendees_count=Count('attendee')).get(pk=pk)
             serializer = EventSerializer(event)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Event.DoesNotExist as ex:
@@ -105,9 +107,10 @@ class GamerEventSerializer(serializers.ModelSerializer):
 
 class EventSerializer(serializers.ModelSerializer):
     """JSON serializer for events"""
+    attendee_count = serializers.IntegerField(default=None)
     organizer = GamerEventSerializer(many=False)
 
     class Meta:
         model = Event
-        fields = ('id', 'description', 'date', 'time', 'attendee', 'organizer', 'game', 'joined')
+        fields = ('id', 'description', 'date', 'time', 'attendee', 'organizer', 'game', 'joined', 'attendee_count')
         depth = 1
