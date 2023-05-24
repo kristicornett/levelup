@@ -47,6 +47,9 @@ class GameView(ViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save(gamer=gamer)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+
+     
 
         
     
@@ -91,7 +94,8 @@ class GameView(ViewSet):
 class CreateGameSerializer(serializers.ModelSerializer):
     class Meta:
         model = Game
-        fields = ['id', 'title', 'maker', 'number_of_players', 'skill_level', 'game_type']   
+        fields = ['id', 'title', 'maker', 'number_of_players', 'skill_level', 'game_type']
+   
     
 class GameSerializer(serializers.ModelSerializer):
     """JSON serializer for games"""
